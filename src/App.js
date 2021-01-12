@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import { ThemeProvider as MuiThemeProvider} from '@material-ui/core/styles';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
+import jwtDecode from 'jwt-decode';
+
+//Components
+import Navbar from './components/Navbar'
+
+//Pages
+import Home from'./pages/home'
+import Login from'./pages/login'
+import Signup from'./pages/signup'
+
+export const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#33c9dc',
+      main: '#00bcd4',
+      dark: '#00B394',
+      contrastText: '#fff'
+    },
+    secondary: {
+      light: '#ff6333',
+      main: '#ff3d00',
+      dark: '#b22a00',
+      contrastText: '#fff'
+    }
+  }
+});
+
+const token = localStorage.FBIdToken;
+if (token) {
+  const decodedToken = jwtDecode(token);
+  console.log(decodedToken);
+}
+
+class App extends Component{
+  render() {
+      return (
+        <MuiThemeProvider theme={theme}>
+          <div className="App">
+          <Router>
+            <Navbar/>
+            <div className='container'>
+            <Switch>
+              <Route exact path='/' component={Home}></Route>
+              <Route exact path='/login' component={Login}></Route>
+              <Route exact path='/signup' component={Signup}></Route>
+            </Switch>
+            </div>
+          </Router>
+        </div>
+        </MuiThemeProvider>
+    )
+  }
 }
 
 export default App;
