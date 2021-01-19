@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles'
 import AppIcon from '../images/ape-logo.png'
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -11,7 +10,14 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import styles from '../styles'
+
+//Redux stuff
+import { connect } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
+
+import theme from '../util/theme'
+
+const styles = theme;
 
 class Login extends Component {
 constructor() {
@@ -19,38 +25,24 @@ constructor() {
     this.state = {
         email: '',
         password: '',
-        loading: false,
         errors: {}
     }
 }
 
+componentWillReceiveProps(nextProps){
+    if(nextProps.UI.errors) {
+        this.setState({ errors: nextProps.UI.errors})
+    }
+}
 
 handleSubmit = (e) => {
     e.preventDefault();
 
-    this.setState({
-        loading: true
-    })
     const userData = {
         email: this.state.email,
         password: this.state.password
     }
-    axios.post('/login', userData)
-        .then(res => {
-            console.log(res.data);
-            localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-
-            this.setState({
-                loading: false
-            })
-            this.props.history.push('/');
-        })
-        .catch(err => {
-            this.setState({
-                errors: err.response.data,
-                loading: false
-            })
-        })
+    this.props.loginUser(userData, this.props.history)
 }
 
 handleChange = (event) => {
@@ -60,8 +52,17 @@ handleChange = (event) => {
 }
 
 render() {
-    const {classes} = this.props;
-    const { errors, loading } = this.state;
+    const { classes, UI: {loading} } = this.props;
+    const { errors } = this.state;
+
+    let invalidText
+    if(errors.error){
+        invalidText = 'Wrong credentials, please try again.'
+    } else if (errors.general) {
+        invalidText = errors.general;
+    } else {
+        invalidText = '';
+    }
 
     return (
         <Grid container className={classes.form}>
@@ -94,9 +95,9 @@ render() {
                         value={this.state.password} 
                         onChange={this.handleChange} 
                         fullWidth/>
-                        {errors.general && (
+                        {invalidText && (
                             <Typography variant='body2' className={classes.customError}>
-                                {errors.general}
+                                {invalidText}
                             </Typography>
                         )}
                     <Button 
@@ -120,7 +121,17 @@ render() {
 }
 
 Login.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(Login)
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+})
+
+const mapActionsToProps = { loginUser }
+
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login))
