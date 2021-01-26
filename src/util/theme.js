@@ -1,4 +1,4 @@
-export default {
+const theme = {
   spreadIt: {
     palette: {
         primary: {
@@ -103,3 +103,5 @@ export default {
     },
   }
 };
+
+export default theme;
