@@ -9,8 +9,12 @@
 
 .nav-container {
     margin: auto;
+
 }
 
+.nav-container svg{
+    color: #fff;
+}
 
 .card-media {
     width: 150px;
@@ -20,4 +24,8 @@
 
 .loader {
     margin-left: 45%;
+}
+
+.edit-pic {
+    width: 75px;
 }

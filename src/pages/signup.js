@@ -15,9 +15,9 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux';
 import { signupUser } from '../redux/actions/userActions'
 
-import theme from '../util/theme'
-
-const styles = theme;
+const styles = (theme) => ({
+    ...theme.spreadIt
+})
 
 class Signup extends Component {
 constructor() {

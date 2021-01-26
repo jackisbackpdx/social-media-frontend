@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./App.css";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import {ThemeProvider as MuiThemeProvider} from '@material-ui/core/styles';
+import {createMuiTheme} from "@material-ui/core/styles";
 import jwtDecode from "jwt-decode";
 import themeObject from './util/theme'
 // Redux

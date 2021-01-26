@@ -15,9 +15,9 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux';
 import { loginUser } from '../redux/actions/userActions';
 
-import theme from '../util/theme'
-
-const styles = theme;
+const styles = (theme) => ({
+    ...theme.spreadIt
+})
 
 class Login extends Component {
 constructor() {
@@ -112,7 +112,7 @@ render() {
                     )}
                     </Button>
                 </form>
-                <small>Don't have an account? sign up <Link to='/signup'>here</Link></small>
+                <small className={classes.small}>Don't have an account? sign up <Link to='/signup'>here</Link></small>
             </Grid>
             <Grid item sm/>
         </Grid>
